@@ -1,0 +1,9 @@
+Here are some todos for project:
+1) Http Server (Not yet finished)
+2) Chat Server (Not yet finished)
+3) Simple ICMP Server(Not yet finished)
+4) Game written in javascript(Not yet finished)
+
+#Some thoughts:
+First task is considered to be finished once http server 
+is able to serve a game which will be written in javascript.

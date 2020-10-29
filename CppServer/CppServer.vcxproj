@@ -18,6 +18,36 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\app.cpp" />
+    <ClCompile Include="core\base_connection.hpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="servers\chat_server\chat_server.cpp" />
+    <ClCompile Include="servers\http_server\connection.cpp" />
+    <ClCompile Include="servers\http_server\http_server.cpp" />
+    <ClCompile Include="servers\http_server\request.cpp" />
+    <ClCompile Include="servers\http_server\response.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\app.hpp" />
+    <ClInclude Include="core\DBConn.hpp" />
+    <ClInclude Include="core\header.hpp" />
+    <ClInclude Include="core\logger.hpp" />
+    <ClInclude Include="core\non_constructible.h" />
+    <ClInclude Include="core\non_copyable.hpp" />
+    <ClInclude Include="core\typedefs.hpp" />
+    <ClInclude Include="servers\chat_server\chat_server.hpp" />
+    <ClInclude Include="servers\http_server\connection.hpp" />
+    <ClInclude Include="servers\http_server\http_server.hpp" />
+    <ClInclude Include="servers\http_server\request.hpp" />
+    <ClInclude Include="servers\http_server\response.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todos.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="core\index.html" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{E151C057-9143-4BB9-A657-942548C42C55}</ProjectGuid>
@@ -75,6 +105,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>F:\boost\boost_1_72_0\stage\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -101,16 +132,23 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>F:\boost\boost_1_72_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -150,9 +188,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CppServer.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

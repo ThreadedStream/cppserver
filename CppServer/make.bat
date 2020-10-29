@@ -1,0 +1,1 @@
+cl /O2 /LIBPATH:F:\boost\boost_1_72_0\stage\lib /I F:\boost\boost_1_72_0 main.cpp
