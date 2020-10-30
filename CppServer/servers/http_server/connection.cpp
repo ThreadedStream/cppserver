@@ -1,6 +1,8 @@
 #include "connection.hpp"
 
 
+
+
 void connection::load_file(const std::string& filename)
 {
 	std::ifstream stream(filename, std::ios::in);
@@ -14,13 +16,34 @@ void connection::load_file(const std::string& filename)
 	}
 	else
 	{
-		Logger::log(SEVERITY::ERR, "File does not exist");
+		Logger::log(SEVERITY::ERR, "File does not exist\n");
+	}
+}
+
+void connection::initDBConnection(err_code& err)
+{
+	if (!connInstance->init_conn())
+	{
+		err.cause = "Failed to initialize connection to a database\n";
 	}
 }
 	
 //Main(so-called "driver") method
 void connection::start_processing()
 {
+	Logger::log(SEVERITY::DEBUG, "Preparation of necessary resources\n");
+	Logger::log(SEVERITY::DEBUG, "Attempt to initialize database connection\n");
+	err_code err;
+	initDBConnection(err);
+	if (err.cause == "")
+	{
+		Logger::log(SEVERITY::DEBUG, "Database connection has been successfully established");
+	}
+	else {
+		Logger::log(SEVERITY::ERR, err.cause);
+	}
+	
+	
 	auto self(shared_from_this());
 	//load_file(FILENAME);
 	socket_.async_read_some(buffer(buffer_), [&, self](const errc& err, size_t length) {

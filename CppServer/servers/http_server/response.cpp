@@ -48,10 +48,9 @@ std::string response::load_template_file(std::string & path)
 	//construct a full path
 	if (path == "/")
 	{
-		full_path = template_dir_ + "greet.html";
+		full_path = template_dir_ + "/greet.html";
 	}
 	else {
-		path.erase(path.begin() + path.length() - 1);
 		full_path = template_dir_ + path + ".html";
 	}
 	std::ifstream in(full_path, std::ios::in | std::ios::binary);

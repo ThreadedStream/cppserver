@@ -8,7 +8,7 @@ public:
 	App() :
 		server_http_(5, 5) {};
 	FORCE_INLINE void run_http_server() { server_http_.run(); }
-	FORCE INLINE void run_chat_server() {  }
+	FORCE_INLINE void run_chat_server() {  }
 private:
 	http_server server_http_;
 	

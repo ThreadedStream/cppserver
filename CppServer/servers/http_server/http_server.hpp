@@ -4,7 +4,6 @@
 #include "connection.hpp"
 
 	
-
 class http_server : public base_connection
 {
 public:
@@ -16,7 +15,6 @@ private:
 	void process();
 	void accept_handler(const errc& err);
 	void handle_stop();
-
 
 private:
 	asio_ctx context_{ 1 };

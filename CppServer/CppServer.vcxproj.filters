@@ -24,6 +24,9 @@
     <ClCompile Include="core\base_connection.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="servers\chat_server\chat_server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="servers\http_server\connection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,15 +39,12 @@
     <ClCompile Include="servers\http_server\response.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="servers\chat_server\chat_server.cpp">
+    <ClCompile Include="core\dbconn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\app.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\typedefs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\logger.hpp">
@@ -54,6 +54,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\header.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="servers\chat_server\chat_server.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\non_constructible.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\typedefs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="servers\http_server\connection.hpp">
@@ -68,13 +77,7 @@
     <ClInclude Include="servers\http_server\response.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="servers\chat_server\chat_server.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\DBConn.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\non_constructible.h">
+    <ClInclude Include="core\dbconn.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

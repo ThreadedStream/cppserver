@@ -1,5 +1,7 @@
 PROJECT DEPENDENCIES:
 boost(version 1.72) (link https://dl.bintray.com/boostorg/release/1.72.0/source/)
-mysql connector c++ api (link https://dev.mysql.com/downloads/connector/cpp/) Windows ZIP archive debug binaries
+BUILD INSTRUCTIONS FOR Boost:
 
+
+mysql connector c++ api (link https://dev.mysql.com/downloads/connector/cpp/) Windows ZIP archive debug binaries
 

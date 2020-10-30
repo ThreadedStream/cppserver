@@ -15,7 +15,7 @@ int main(int, const char*[])
 	{
 	case '1':
 	{
-		std::cout << "Running...";
+		std::cout << "Running...\n";
 		app.run_http_server();
 		break;
 	}
