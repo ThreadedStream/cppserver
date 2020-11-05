@@ -7,13 +7,16 @@
 #include <boost/thread.hpp>
 #include <boost/array.hpp>
 #include <fstream>
+#include <ctime>
 #include <cstdint>
 #include <unordered_set>
+#include <cassert>
 
 class connection;
 
 using namespace boost::asio;
 using namespace boost::filesystem;
+
 
 #define ADDR_FROM_STR(addr) ip::tcp::address::from_string(addr)
 #define FORCE_INLINE inline

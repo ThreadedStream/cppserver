@@ -1,6 +1,20 @@
 #include "connection.hpp"
 
 
+
+connection::connection(asio_ctx& context) :
+	//strand_(make_strand(context)),
+	//connInstance(dbconn::getInstance()),
+	socket_(context),
+	//Note that trailing slash is required for proper functioning
+	resp(stx.template_dir()),
+	stx("G:/cppserver/CppServer", "templates")
+{
+	stx.set_req_file("dblog.txt");
+	dbwriter.open(stx.req_file());
+}
+
+
 void connection::load_file(const std::string& filename)
 {
 	std::ifstream stream(filename, std::ios::in);
@@ -18,30 +32,41 @@ void connection::load_file(const std::string& filename)
 	}
 }
 
-void connection::initDBConnection(err_code& err)
-{
-	/*if (!connInstance->init_conn())
-	{
-		err.cause = "Failed to initialize connection to a database\n";
-	}*/
-}
-	
 
-void connection::write_headers_to_file(const std::string& str, err_code& err)
+void connection::request_db(const std::string& msg, err_code& err)
 {
-	if (!dblog.is_open())
+	if (dbwriter.is_open())
 	{
-		err.cause = "Failed to open dblog file\n";
-		return;
+		auto date = _now();
+		auto whole_message = msg + date;
+		dbwriter.write(whole_message.c_str(), msg.length());
 	}
 	else {
-		dblog.write(str.c_str(), str.length());
-		if (dblog.fail())
-		{
-			err.cause = "Failed to write to a file\n";
-		}
+		err.cause = "Failed to open db log file";
+		return;
 	}
 }
+
+std::string connection::_now()
+{
+	time_t raw_time;
+	struct tm * timeinfo = (struct tm*) malloc(sizeof(struct tm));
+	char buffer[80];
+
+	time(&raw_time);
+
+	localtime_s(timeinfo, &raw_time);
+
+	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+
+	delete timeinfo;
+
+	std::string output = "\n";
+	output += buffer;
+
+	return output;
+}
+
 
 //Main(so-called "driver") method
 void connection::start_processing()
@@ -49,7 +74,6 @@ void connection::start_processing()
 	Logger::log(SEVERITY::DEBUG, "Preparation of necessary resources\n");
 	Logger::log(SEVERITY::DEBUG, "Attempt to initialize database connection\n");
 	err_code err;
-	initDBConnection(err);
 	if (err.cause == "")
 	{
 		Logger::log(SEVERITY::DEBUG, "Database connection has been successfully established");
@@ -66,7 +90,7 @@ void connection::start_processing()
 			
 			Logger::log(SEVERITY::DEBUG, "Message: " + std::string(buffer_.c_array()));
 			err_code err_c;
-			write_headers_to_file(buffer_.c_array(), err_c);
+			request_db(buffer_.data(), err_c);
 			if (err_c.cause != "")
 			{
 				Logger::log(SEVERITY::DEBUG, err_c.cause);

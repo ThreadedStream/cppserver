@@ -41,6 +41,7 @@ std::string response::buildResponse(request& req)
 }
 
 
+
 std::string response::load_template_file(std::string & path)
 {
 	std::vector<char> buf;
@@ -48,13 +49,12 @@ std::string response::load_template_file(std::string & path)
 	//construct a full path
 	if (path == "/")
 	{
-		full_path = template_dir_ + "/greet.html";
+		full_path = template_dir_ + "/" + "greet.html";
 	}
 	else {
-		full_path = template_dir_ + path + ".html";
+		full_path = template_dir_ + "/" + path + ".html";
 	}
 	std::ifstream in(full_path, std::ios::in | std::ios::binary);
-
 	if (in.is_open())
 	{	
 		in.seekg(std::ios::beg, std::ios::end);

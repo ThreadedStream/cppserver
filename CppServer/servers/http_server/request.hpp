@@ -17,6 +17,7 @@ public:
 	
 	bool isGood();
 	inline request_header header() const { return req_header_; }
+	
 
 private:
 	void parse();

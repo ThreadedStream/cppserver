@@ -2,6 +2,7 @@
 
 #include "../../core/base_connection.hpp"
 #include "connection.hpp"
+#include "settings.hpp"
 
 	
 class http_server : public base_connection

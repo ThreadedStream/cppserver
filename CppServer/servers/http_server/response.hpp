@@ -25,11 +25,13 @@ public:
 	}code;
 
 	explicit response(const std::string& template_dir):
-		template_dir_(template_dir){};
+					template_dir_(template_dir)
+					{};
 
 	std::string buildResponse(request& req);
 
 	inline std::string response_content() const noexcept{ return content; } 
+	
 
 private:
 	std::string load_template_file(std::string& path);
