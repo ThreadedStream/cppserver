@@ -16,4 +16,5 @@ protected:
 	std::string BASE_DIR_ = "";
 	std::string TEMPLATE_DIR_ = "";
 	std::string REQ_FILE_ = "";
+	std::string STATIC_DIR_ = "";
 };

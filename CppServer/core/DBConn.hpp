@@ -10,8 +10,6 @@
 class dbconn : private non_copyable, private non_constructible {
 public:
 	
-	
-
 private:
 	static dbconn* instance;
 };

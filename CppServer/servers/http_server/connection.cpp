@@ -8,9 +8,11 @@ connection::connection(asio_ctx& context) :
 	socket_(context),
 	//Note that trailing slash is required for proper functioning
 	resp(stx.template_dir()),
-	stx("G:/cppserver/CppServer", "templates")
+	stx("F:/cppserver/", "templates")
 {
 	stx.set_req_file("dblog.txt");
+	stx.set_static_dir("static");
+	resp.set_static_dir(stx.static_dir());
 	dbwriter.open(stx.req_file());
 }
 
@@ -42,7 +44,7 @@ void connection::request_db(const std::string& msg, err_code& err)
 		dbwriter.write(whole_message.c_str(), msg.length());
 	}
 	else {
-		err.cause = "Failed to open db log file";
+		err.cause = "Failed to open db log file\n";
 		return;
 	}
 }
@@ -76,7 +78,7 @@ void connection::start_processing()
 	err_code err;
 	if (err.cause == "")
 	{
-		Logger::log(SEVERITY::DEBUG, "Database connection has been successfully established");
+		Logger::log(SEVERITY::DEBUG, "Database connection has been successfully established\n");
 	}
 	else {
 		Logger::log(SEVERITY::ERR, err.cause);
@@ -87,7 +89,6 @@ void connection::start_processing()
 	socket_.async_read_some(buffer(buffer_), [&, self](const errc& err, size_t length) {
 		if (!err)
 		{
-			
 			Logger::log(SEVERITY::DEBUG, "Message: " + std::string(buffer_.c_array()));
 			err_code err_c;
 			request_db(buffer_.data(), err_c);

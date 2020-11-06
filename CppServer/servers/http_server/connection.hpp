@@ -31,7 +31,6 @@ private:
 	void request_db(const std::string& msg, err_code& er);
 	std::string _now();
 
-
 private:
 	//fields
 	sock_t socket_;

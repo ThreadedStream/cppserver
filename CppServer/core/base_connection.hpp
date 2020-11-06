@@ -3,6 +3,7 @@
 #include "typedefs.hpp"
 #include "logger.hpp"
 
+
 class base_connection : private non_copyable
 {
 public:
@@ -14,7 +15,7 @@ public:
 	}
 
 	virtual ~base_connection() {};
-
+	
 
 protected:
 	//endp_obj endpoint_;

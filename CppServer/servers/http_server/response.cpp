@@ -52,7 +52,11 @@ std::string response::load_template_file(std::string & path)
 		full_path = template_dir_ + "/" + "greet.html";
 	}
 	else {
-		full_path = template_dir_ + "/" + path + ".html";
+		if (path.substr(path.length() - 4, path.length()) != ".css")
+			full_path = template_dir_ + "/" + path + ".html";
+		else {
+			full_path = static_dir_ + '/' + path;
+		}
 	}
 	std::ifstream in(full_path, std::ios::in | std::ios::binary);
 	if (in.is_open())

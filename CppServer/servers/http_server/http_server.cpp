@@ -83,5 +83,3 @@ void http_server::handle_stop()
 {
 	context_.stop();
 }
-
-

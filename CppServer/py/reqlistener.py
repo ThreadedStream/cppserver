@@ -9,7 +9,7 @@ def sigintcallback(sig, frame):
 
 
 def listen():
-    
+    pass    
 
 if __name__ == '__main__':
     init()
