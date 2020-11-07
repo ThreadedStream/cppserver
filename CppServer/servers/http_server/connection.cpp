@@ -3,19 +3,15 @@
 
 
 connection::connection(asio_ctx& context) :
-	//strand_(make_strand(context)),
-	//connInstance(dbconn::getInstance()),
-	socket_(context),
-	//Note that trailing slash is required for proper functioning
-	resp(stx.template_dir()),
-	stx("F:/cppserver/", "templates")
+	socket_(context)
 {
+	stx.set_template_dir("templates");
 	stx.set_req_file("dblog.txt");
 	stx.set_static_dir("static");
+	resp.set_template_dir(stx.template_dir());
 	resp.set_static_dir(stx.static_dir());
 	dbwriter.open(stx.req_file());
 }
-
 
 void connection::load_file(const std::string& filename)
 {
@@ -34,7 +30,6 @@ void connection::load_file(const std::string& filename)
 	}
 }
 
-
 void connection::request_db(const std::string& msg, err_code& err)
 {
 	if (dbwriter.is_open())
@@ -49,6 +44,9 @@ void connection::request_db(const std::string& msg, err_code& err)
 	}
 }
 
+/*
+	@Function for obtaining current time
+*/
 std::string connection::_now()
 {
 	time_t raw_time;
@@ -68,7 +66,6 @@ std::string connection::_now()
 
 	return output;
 }
-
 
 //Main(so-called "driver") method
 void connection::start_processing()
