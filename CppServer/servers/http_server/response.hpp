@@ -24,15 +24,14 @@ public:
 		service_unavailable = 503
 	}code;
 
-	explicit response(const std::string& template_dir) :
-					template_dir_(template_dir)
-					{};
+	response() = default;
 
 	std::string buildResponse(request& req);
 
 	inline std::string response_content() const noexcept{ return content; } 
 	//Note: Required for proper functioning
 	inline void set_static_dir(const std::string& static_dir) noexcept { static_dir_ = static_dir; }
+	inline void set_template_dir(const std::string& template_dir) noexcept { template_dir_ = template_dir; }
 
 private:
 	std::string load_template_file(std::string& path);
