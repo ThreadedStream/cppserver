@@ -2,13 +2,23 @@
 #include "../../core/typedefs.hpp"
 #include "../../core/logger.hpp"
 
+
+
+struct request_data {
+	std::string key;
+	std::string value;
+};
+
 struct request_header {
 	std::string method;
 	std::string path;
+	std::vector<request_data> req_data;
 	std::string protocol;
 	ui16 majVer;
 	ui16 minVer;
 };
+
+
 
 class request {
 public:
@@ -20,6 +30,7 @@ public:
 
 private:
 	void parse();
+	void parseRequestData(const std::string& path);
 	void consume(char c);
 
 private:
