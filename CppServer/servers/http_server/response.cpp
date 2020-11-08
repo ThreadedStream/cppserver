@@ -25,14 +25,35 @@ namespace responses {
 	}
 }
 
+std::string response::handle_arithmetic(request& req)
+{
+	auto num1Str = req.header().req_data.at(0).value;
+	auto num2Str = req.header().req_data.at(1).value;
+
+	int num1 = atoi(num1Str.c_str());
+	int num2 = atoi(num2Str.c_str());
+	
+	std::string buf;
+
+	buf = "<h1> The result is " + std::to_string(num1 * num2) + "</h1>";
+
+	return buf;
+}
+
 std::string response::buildResponse(request& req)
 {
 	std::string buf;
 
 	if (req.isGood())
 	{
-		auto path = req.header().path;
-		buf = load_template_file(path);
+		if (!req.header().req_data.empty())
+		{
+			buf = handle_arithmetic(req);
+		}
+		else {
+			auto path = req.header().path;
+			buf = load_template_file(path);
+		}
 	}
 	else {
 		buf = responses::code_to_html(status_code::bad_request);
@@ -73,6 +94,3 @@ std::string response::load_template_file(std::string & path)
 		return not_found_res.c_str();
 	}
 }
-
-
-

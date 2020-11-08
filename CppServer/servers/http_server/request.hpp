@@ -18,8 +18,6 @@ struct request_header {
 	ui16 minVer;
 };
 
-
-
 class request {
 public:
 	explicit request(const std::string& req_str) :

@@ -1,18 +1,14 @@
-GET /favicon.ico HTTP/1.1
+POST /127.0.0.1/secret?num1=34343&num2=1212 HTTP/1.1
 Host: 127.0.0.1
 Connection: keep-alive
-Pragma: no-cache
-Cache-Control: no-cache
+Content-Length: 0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36
-Accept: image/avif,image/webp,image/apng,image/*,*/*;q=0.8
+Accept: */*
+Origin: http://127.0.0.1
 Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://127.0.0.1/
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://127.0.0.1/secret
 Accept-Encoding: gzip, deflate, br
-Accept-Language: en,en-US;q=0.9
-
-
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en,en-US;q=0.9
+Accept-Language: fr,en;q=0.9,en-US;q=0.8
 

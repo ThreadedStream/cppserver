@@ -32,6 +32,7 @@ public:
 	//Note: Required for proper functioning
 	inline void set_static_dir(const std::string& static_dir) noexcept { static_dir_ = static_dir; }
 	inline void set_template_dir(const std::string& template_dir) noexcept { template_dir_ = template_dir; }
+	std::string handle_arithmetic(request& req);
 
 private:
 	std::string load_template_file(std::string& path);

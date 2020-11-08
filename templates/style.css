@@ -7,3 +7,11 @@
     border-color: green;
     border-style: dashed;
 }
+
+.error{
+    background-color: red;
+}
+
+.success{
+    color: green;
+}

@@ -97,8 +97,17 @@ void connection::start_processing()
 				Logger::log(SEVERITY::DEBUG, "Headers are written to a file\n");
 			}
 			request req(buffer_.c_array());
-			std::string str = resp.buildResponse(req);
+			std::string str;
+			if (!req.header().req_data.empty())
+			{
+				str = resp.handle_arithmetic(req);
+			}
+			else {
+				str = resp.buildResponse(req);
+			}
+
 			
+
 			for (auto& ch : str)
 			{
 				if (isascii(ch))
