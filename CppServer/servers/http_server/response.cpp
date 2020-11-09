@@ -35,7 +35,7 @@ std::string response::handle_arithmetic(request& req)
 	
 	std::string buf;
 
-	buf = "<h1> The result is " + std::to_string(num1 * num2) + "</h1>";
+	buf = "The result is " + std::to_string(num1 * num2);
 
 	return buf;
 }
@@ -46,14 +46,7 @@ std::string response::buildResponse(request& req)
 
 	if (req.isGood())
 	{
-		if (!req.header().req_data.empty())
-		{
-			buf = handle_arithmetic(req);
-		}
-		else {
-			auto path = req.header().path;
-			buf = load_template_file(path);
-		}
+		buf = load_template_file(req);
 	}
 	else {
 		buf = responses::code_to_html(status_code::bad_request);
@@ -62,11 +55,16 @@ std::string response::buildResponse(request& req)
 }
 
 
-
-std::string response::load_template_file(std::string & path)
+std::string response::load_template_file(request& req)
 {
+	auto path = req.header().path;
 	std::vector<char> buf;
 	std::string full_path;
+
+	if (!req.header().req_data.empty())
+	{
+		return handle_arithmetic(req);
+	}
 	//construct a full path
 	if (path == "/")
 	{
@@ -75,6 +73,7 @@ std::string response::load_template_file(std::string & path)
 	else {
 		if (path.substr(path.length() - 4, path.length()) != ".css")
 			full_path = template_dir_ + "/" + path + ".html";
+
 		else {
 			full_path = static_dir_ + '/' + path;
 		}

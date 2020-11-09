@@ -35,7 +35,7 @@ public:
 	std::string handle_arithmetic(request& req);
 
 private:
-	std::string load_template_file(std::string& path);
+	std::string load_template_file(request& req);
 
 private:
 	std::string content;
