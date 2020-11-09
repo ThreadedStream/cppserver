@@ -3,24 +3,29 @@ from scapy.all import *
 from scapy.utils import hexdump
 import sys
 from colorama import Fore, init
+from http.server import *
 
 methods = ["GET", "POST", "PUT", "PATCH"]
+
+class RequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200, message="wadwa")
+        self.send_header('Content-Type', 'text/plain')
+        self.end_headers()
+    
+
 
 def sigintcallback(sig, frame):
     print(f'{Fore.RED}Graceful cancellation...')
     sys.exit(0)
 
-def callback(packet):
-    http_packet = str(packet)
-    if http_packet.find('POST'):
-        return post_print(packet)
-
-def post_print(packet):
-    ret = ""
-    ret += "\n".join(packet.sprintf("{Raw:%Raw.load%}\n").split(r"\r\n"))
-    return ret
+def run_server(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
+    server_address = ('',8000)
+    httpd = server_class(server_address, handler_class)
+    httpd.serve_forever()
 
 if __name__ == '__main__':
     init()
     signal.signal(signal.SIGINT, sigintcallback)
-    sniff(prn=callback, filter="tcp port 443")
+    print(f'{Fore.GREEN} Starting db handler server on port 8000....')
+    run_server(server_class=ThreadingHTTPServer, handler_class=RequestHandler)
