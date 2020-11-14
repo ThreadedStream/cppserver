@@ -106,8 +106,6 @@ void connection::start_processing()
 				str = resp.buildResponse(req);
 			}
 
-			
-
 			for (auto& ch : str)
 			{
 				if (isascii(ch))

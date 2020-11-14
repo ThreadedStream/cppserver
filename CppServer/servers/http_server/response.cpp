@@ -63,6 +63,7 @@ std::string response::load_template_file(request& req)
 
 	if (!req.header().req_data.empty())
 	{
+		handle_post_request(req);
 		return handle_arithmetic(req);
 	}
 	//construct a full path
@@ -92,4 +93,45 @@ std::string response::load_template_file(request& req)
 		std::string not_found_res = code_templates::not_found_template;
 		return not_found_res.c_str();
 	}
+}
+
+std::string response::handle_post_request(request& req)
+{
+	streambuf request;
+
+	std::ostream request_stream(&request);
+	
+	ptree root;
+
+	endp_obj db_endp(ADDR_FROM_STR("192.168.43.123"), 5600);
+
+	asio_ctx ctx;
+
+	sock_t sock(ctx, db_endp);
+
+	root.put("first_name", "Jerry");
+	root.put("last_name", "Freed");
+	root.put("email", "jerry.freed@gmail.com");
+	root.put("password", "1234");
+
+	std::ostringstream buf;
+
+	auto hostname = "http://192.168.43.123";
+	write_json(buf, root, false);
+
+	std::string json = buf.str();
+	
+	request_stream << "POST /api/create_user HTTP /1.1\r\n";
+	request_stream << "Host:" << hostname << "\r\n";
+	request_stream << "User-Agent: C/1.0\r\n";
+	request_stream << "Content-Type: application/json; charset=utf-8 \r\n";
+	request_stream << "Content-Length: " << json.length() << "\r\n";
+	request_stream << "Accept: */*\r\n";
+	request_stream << "Connection: close\r\n\r\n";
+	request_stream << json;
+	
+	boost::asio::async_write(sock, request, [&](const errc& err, size_t length) {
+	});
+
+	return "Back there, back then";
 }

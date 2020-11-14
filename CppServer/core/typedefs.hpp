@@ -6,6 +6,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 #include <boost/array.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <fstream>
 #include <ctime>
 #include <cstdint>
@@ -15,11 +17,14 @@
 
 class connection;
 
+//usings
 using namespace boost::asio;
 using namespace boost::filesystem;
+using boost::property_tree::ptree;
+using boost::property_tree::read_json;
+using boost::property_tree::write_json;
 
-
-#define ADDR_FROM_STR(addr) ip::tcp::address::from_string(addr)
+#define ADDR_FROM_STR(addr) ip::address::from_string(addr)
 #define FORCE_INLINE inline
 #define ADDR_TO_STR(sock_ptr) sock_ptr->remote_endpoint().address().to_string()
 

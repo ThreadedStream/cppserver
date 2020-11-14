@@ -25,7 +25,7 @@ public:
 	}code;
 
 	response() = default;
-
+	
 	std::string buildResponse(request& req);
 
 	inline std::string response_content() const noexcept{ return content; } 
@@ -33,12 +33,14 @@ public:
 	inline void set_static_dir(const std::string& static_dir) noexcept { static_dir_ = static_dir; }
 	inline void set_template_dir(const std::string& template_dir) noexcept { template_dir_ = template_dir; }
 	std::string handle_arithmetic(request& req);
-
+	std::string handle_post_request(request& req);
+	
 private:
 	std::string load_template_file(request& req);
 
 private:
 	std::string content;
+	sock_ptr_t dbsock_;
 	std::string template_dir_;
 	std::string static_dir_;
 	//std::vector<const_buffer> to_buffers();
