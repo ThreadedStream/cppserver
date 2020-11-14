@@ -24,8 +24,7 @@ public:
 		service_unavailable = 503
 	}code;
 
-	response() = default;
-	
+	response(io_context& executor) : executor_(executor) {};
 	std::string buildResponse(request& req);
 
 	inline std::string response_content() const noexcept{ return content; } 
@@ -40,6 +39,7 @@ private:
 
 private:
 	std::string content;
+	io_context executor_;
 	sock_ptr_t dbsock_;
 	std::string template_dir_;
 	std::string static_dir_;

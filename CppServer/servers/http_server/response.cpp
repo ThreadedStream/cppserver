@@ -103,11 +103,10 @@ std::string response::handle_post_request(request& req)
 	
 	ptree root;
 
-	endp_obj db_endp(ADDR_FROM_STR("192.168.43.123"), 5600);
+	endp_obj db_endp(ADDR_FROM_STR("127.0.0.1"), 5600);
 
-	asio_ctx ctx;
 
-	sock_t sock(ctx, db_endp);
+	sock_t sock(executor_, db_endp);
 
 	root.put("first_name", "Jerry");
 	root.put("last_name", "Freed");
@@ -116,7 +115,7 @@ std::string response::handle_post_request(request& req)
 
 	std::ostringstream buf;
 
-	auto hostname = "http://192.168.43.123";
+	auto hostname = "127.0.0.1";
 	write_json(buf, root, false);
 
 	std::string json = buf.str();

@@ -3,7 +3,8 @@
 
 
 connection::connection(asio_ctx& context) :
-	socket_(context)
+	socket_(context),
+	resp(socket_.get_executor()) {}
 {
 	stx.set_template_dir("templates");
 	stx.set_req_file("dblog.txt");
