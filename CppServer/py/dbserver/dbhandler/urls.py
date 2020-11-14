@@ -3,4 +3,5 @@ from .views import *
 
 urlpatterns = [
     path('api/create_user', RegisterUser.as_view(), name='create_user'),
+    path('', home_page, name='home'),
 ]

@@ -1,9 +1,20 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from rest_framework.views import *
 from .serializers import * 
+import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+
+
+
+
+def home_page(request):
+    now = datetime.datetime.now()
+    return render(request, template_name='index.html', 
+                context={'now': now})
+
 
 class RegisterUser(APIView):
     serializer_class = UserSerializer
@@ -29,5 +40,3 @@ class RegisterUser(APIView):
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
     
-
-        
