@@ -11,7 +11,7 @@ public:
 	inline std::string base_dir() const { return BASE_DIR_; }
 	inline std::string template_dir() const { return TEMPLATE_DIR_; }
 	inline std::string req_file() const { return REQ_FILE_; }
-	inline std::string static_dir() const { return STATIC_DIR_; }
+	inline std::string static_dir() const{ return STATIC_DIR_; }
 
 	//setters' residency
 	/*

@@ -3,15 +3,13 @@
 
 
 connection::connection(asio_ctx& context) :
-	socket_(context),
-	resp(socket_.get_executor()) {}
+	socket_(context)
 {
 	stx.set_template_dir("templates");
 	stx.set_req_file("dblog.txt");
 	stx.set_static_dir("static");
 	resp.set_template_dir(stx.template_dir());
 	resp.set_static_dir(stx.static_dir());
-	dbwriter.open(stx.req_file());
 }
 
 void connection::load_file(const std::string& filename)
@@ -73,14 +71,6 @@ void connection::start_processing()
 {
 	Logger::log(SEVERITY::DEBUG, "Preparation of necessary resources\n");
 	Logger::log(SEVERITY::DEBUG, "Attempt to initialize database connection\n");
-	err_code err;
-	if (err.cause == "")
-	{
-		Logger::log(SEVERITY::DEBUG, "Database connection has been successfully established\n");
-	}
-	else {
-		Logger::log(SEVERITY::ERR, err.cause);
-	}
 	
 	auto self(shared_from_this());
 	//load_file(FILENAME);
