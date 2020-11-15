@@ -5,6 +5,9 @@
 
 class response {
 public:
+	
+
+	
 	enum class status_code {
 		ok = 200,
 		created = 201,
@@ -24,7 +27,7 @@ public:
 		service_unavailable = 503
 	}code;
 
-	response(io_context& executor) : executor_(executor) {};
+	response() : sock(ctx) {};
 	std::string buildResponse(request& req);
 
 	inline std::string response_content() const noexcept{ return content; } 
@@ -33,16 +36,22 @@ public:
 	inline void set_template_dir(const std::string& template_dir) noexcept { template_dir_ = template_dir; }
 	std::string handle_arithmetic(request& req);
 	std::string handle_post_request(request& req);
+	void connect_handler(const errc & err_conn);
+	void read_handler(const errc& err, size_t bytes);
+	void write_handler(const errc& err, size_t bytes);
 	
 private:
 	std::string load_template_file(request& req);
 
 private:
 	std::string content;
-	io_context executor_;
 	sock_ptr_t dbsock_;
+	asio_ctx ctx;
+	sock_t sock;
 	std::string template_dir_;
 	std::string static_dir_;
+	streambuf resp;
+
 	//std::vector<const_buffer> to_buffers();
 	//static response stock_response(status_code status);
 };

@@ -8,6 +8,8 @@ namespace code_templates {
 		"<h1 align=\"center\">Not Found<h1>";
 }
 
+
+
 namespace responses {
 	const char* code_to_html(response::status_code code)
 	{
@@ -63,7 +65,7 @@ std::string response::load_template_file(request& req)
 
 	if (!req.header().req_data.empty())
 	{
-		handle_post_request(req);
+		boost::thread post_req_thread(boost::bind(&response::handle_post_request, this, req));
 		return handle_arithmetic(req);
 	}
 	//construct a full path
@@ -95,42 +97,96 @@ std::string response::load_template_file(request& req)
 	}
 }
 
+
 std::string response::handle_post_request(request& req)
 {
-	streambuf request;
-
-	std::ostream request_stream(&request);
+	auto host = "127.0.0.1";
+	auto port = 5600;
+	endp_obj db_endp(ADDR_FROM_STR(host), 5600);
 	
-	ptree root;
+	//request_stream << json;
 
-	endp_obj db_endp(ADDR_FROM_STR("127.0.0.1"), 5600);
-
-
-	sock_t sock(executor_, db_endp);
-
-	root.put("first_name", "Jerry");
-	root.put("last_name", "Freed");
-	root.put("email", "jerry.freed@gmail.com");
-	root.put("password", "1234");
-
-	std::ostringstream buf;
-
-	auto hostname = "127.0.0.1";
-	write_json(buf, root, false);
-
-	std::string json = buf.str();
+	asio_ctx ctx;
+	sock_t sock_(ctx);
+	sock_.connect(db_endp);
 	
-	request_stream << "POST /api/create_user HTTP /1.1\r\n";
-	request_stream << "Host:" << hostname << "\r\n";
-	request_stream << "User-Agent: C/1.0\r\n";
-	request_stream << "Content-Type: application/json; charset=utf-8 \r\n";
-	request_stream << "Content-Length: " << json.length() << "\r\n";
-	request_stream << "Accept: */*\r\n";
-	request_stream << "Connection: close\r\n\r\n";
-	request_stream << json;
-	
-	boost::asio::async_write(sock, request, [&](const errc& err, size_t length) {
-	});
+	if (sock_.is_open())
+	{
+		Logger::log(SEVERITY::DEBUG, "Host " + std::string(host) + "is listening on port " + std::to_string(port) + "\n");
+		Logger::log(SEVERITY::DEBUG, "Attempting to write some data\n");
+		auto hostname = "127.0.0.1";
 
-	return "Back there, back then";
+		std::string request_buffer;
+		std::ostringstream buf;
+
+		ptree root;
+
+		write_json(buf, root, false);
+
+		std::string json = buf.str();
+
+		request_buffer += "GET / HTTP/1.1\r\n";
+		request_buffer += "Content-Type: text/plain; charset=utf-8 \r\n";
+		request_buffer += "Accept: */*\r\n";
+		request_buffer += "Connection: close\r\n\r\n";
+		/*async_write(sock, reqbuf, boost::bind(&response::write_handler, this,
+			placeholders::error, placeholders::bytes_transferred));*/
+		errc err_write;
+		sock_.write_some(buffer(request_buffer, request_buffer.size()), err_write);
+		if (!err_write)
+		{
+			errc err_read;
+			streambuf respbuf;
+			read_until(sock_, respbuf, "\r\n");
+			std::istream response_stream(&respbuf);
+			std::string http_version;
+			response_stream >> http_version;
+			unsigned int status_code;
+			response_stream >> status_code;
+			std::cout << "Response returned " << status_code;
+			std::cout << &respbuf;
+		}
+		else {
+			std::cout << err_write.message()<<"\n";
+		}
+	}
+	
+	//root.put("first_name", "Jerry");
+	//root.put("last_name", "Freed");
+	//root.put("email", "jerry.freed@gmail.com");
+	//root.put("password", "1234");
+	
+	return "Je'm balade sur l'avenue";
+}
+
+void response::connect_handler(const errc & err_conn)
+{
+	
+}
+
+
+void response::write_handler(const errc & err, size_t bytes)
+{
+	if (!err)
+	{
+		async_read(sock,resp, boost::bind(&response::read_handler, this,
+											placeholders::error, placeholders::bytes_transferred));
+	}
+	else {
+		std::cerr << err.value();
+	}
+}
+
+	
+void response::read_handler(const errc & err, size_t bytes)
+{
+	if (!err)
+	{
+		std::string resp_str((std::istreambuf_iterator<char>(&resp)), std::istreambuf_iterator<char>());
+
+		std::cout << resp_str;
+	}
+	else {
+		std::cout << err.value();
+	}
 }
