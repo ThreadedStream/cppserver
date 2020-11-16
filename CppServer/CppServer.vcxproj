@@ -30,6 +30,7 @@
     <ClCompile Include="servers\http_server\response.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="client\client.hpp" />
     <ClInclude Include="core\app.hpp" />
     <ClInclude Include="core\dbconn.hpp" />
     <ClInclude Include="core\header.hpp" />
@@ -184,6 +185,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>F:\boost\boost_1_72_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
