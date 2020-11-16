@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <form id="signup" method="POST">
+            <input type="text" id="login">
+            <input type="text" id="password">
+            <br>
+            <button style="position:relative; top:20px;"type="submit">Sign Up</button>
+            <br>
+        </form>
+
+        <script>
+            const foo = document.getElementById('signup');
+            foo.addEventListener('submit', (e) => {
+                e.preventDefault();
+            })
+
+        </script>
+    </body>
+</html>
