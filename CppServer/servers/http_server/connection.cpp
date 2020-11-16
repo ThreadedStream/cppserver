@@ -89,8 +89,7 @@ void connection::start_processing()
 			}
 			request req(buffer_.c_array());
 			std::string str;
-			if (!req.header().req_data.empty())
-			{
+			if (!req.header().req_data.empty()){
 				str = resp.handle_arithmetic(req);
 			}
 			else {

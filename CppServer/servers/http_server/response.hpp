@@ -2,6 +2,7 @@
 #include "../../core/typedefs.hpp"
 #include "../../core/header.hpp"
 #include "request.hpp"
+#include "../../client/client.hpp"
 
 class response {
 public:

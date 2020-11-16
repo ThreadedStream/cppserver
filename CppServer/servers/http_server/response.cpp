@@ -103,54 +103,35 @@ std::string response::handle_post_request(request& req)
 	auto host = "127.0.0.1";
 	auto port = 5600;
 	endp_obj db_endp(ADDR_FROM_STR(host), 5600);
-	
+
 	//request_stream << json;
 
 	asio_ctx ctx;
 	sock_t sock_(ctx);
 	sock_.connect(db_endp);
-	
-	if (sock_.is_open())
-	{
-		Logger::log(SEVERITY::DEBUG, "Host " + std::string(host) + "is listening on port " + std::to_string(port) + "\n");
-		Logger::log(SEVERITY::DEBUG, "Attempting to write some data\n");
-		auto hostname = "127.0.0.1";
+	auto hostname = "127.0.0.1";
 
-		std::string request_buffer;
-		std::ostringstream buf;
+	std::string request_buffer;
+	std::ostringstream buf;
 
-		ptree root;
+	ptree root;
 
-		write_json(buf, root, false);
+	write_json(buf, root, false);
 
-		std::string json = buf.str();
+	std::string json = buf.str();
 
-		request_buffer += "GET / HTTP/1.1\r\n";
-		request_buffer += "Content-Type: text/plain; charset=utf-8 \r\n";
-		request_buffer += "Accept: */*\r\n";
-		request_buffer += "Connection: close\r\n\r\n";
-		/*async_write(sock, reqbuf, boost::bind(&response::write_handler, this,
-			placeholders::error, placeholders::bytes_transferred));*/
-		errc err_write;
-		sock_.write_some(buffer(request_buffer, request_buffer.size()), err_write);
-		if (!err_write)
-		{
-			errc err_read;
-			streambuf respbuf;
-			read_until(sock_, respbuf, "\r\n");
-			std::istream response_stream(&respbuf);
-			std::string http_version;
-			response_stream >> http_version;
-			unsigned int status_code;
-			response_stream >> status_code;
-			std::cout << "Response returned " << status_code;
-			std::cout << &respbuf;
-		}
-		else {
-			std::cout << err_write.message()<<"\n";
-		}
+	request_buffer += "GET / HTTP/1.1\r\n";
+	request_buffer += "Content-Type: text/plain; charset=utf-8 \r\n";
+	request_buffer += "Accept: */*\r\n";
+	request_buffer += "Connection: close\r\n\r\n";
+
+	err_code err;
+	sync_client{ sock_ptr_t(&sock_), request_buffer }(err);
+	if (err.cause != "") {
+		Logger::log(SEVERITY::ERR, err.cause);
+		return "";
 	}
-	
+
 	//root.put("first_name", "Jerry");
 	//root.put("last_name", "Freed");
 	//root.put("email", "jerry.freed@gmail.com");
