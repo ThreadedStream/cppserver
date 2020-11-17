@@ -23,20 +23,21 @@ class RegisterUser(APIView):
     def post(self, request, format=None):
         data = {}
         ser_json = {}
-        ser_json['first_name'] = request.data['first_name']
-        ser_json['last_name']  = request.data['last_name']
-        ser_json['email']      = request.data['email']
-        ser_json['password']   = request.data['password']
+        username   = request.data['username']
+        first_name = request.data['first_name']
+        last_name  = request.data['last_name']
+        email      = request.data['email']
+        password   = request.data['password']
 
-        user = UserSerializer(data=ser_json)
-        if user.is_valid():
-            user.save()
+        user = User.objects.create(username=username,first_name=first_name,
+                last_name=last_name, email=email, password=password)
+        if user:
             data['success'] = True
             data['result']  = True
             return Response(data=data, status=status.HTTP_200_OK)
         else:
             data['success'] = False
-            data['result']  = user.errors
+            data['result']  = False
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
     
