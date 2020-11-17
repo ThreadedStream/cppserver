@@ -51,7 +51,11 @@ private:
 		response_stream >> http_version;
 		unsigned int status_code;
 		response_stream >> status_code;
-		Logger::log(SEVERITY::DEBUG, "Response returned " + (status_code));
+		if (status_code != 200) {
+			err.cause = "Operation has failed with the following status code: " + status_code;
+			return;
+		}
+		Logger::log(SEVERITY::DEBUG, "Operation has finished successfully\n");
 		std::cout << &respbuf;
 	}
 };

@@ -40,6 +40,7 @@ public:
 	void connect_handler(const errc & err_conn);
 	void read_handler(const errc& err, size_t bytes);
 	void write_handler(const errc& err, size_t bytes);
+	std::string load_json_from_database();
 	
 private:
 	std::string load_template_file(request& req);

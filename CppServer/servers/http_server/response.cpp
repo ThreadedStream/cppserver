@@ -63,10 +63,16 @@ std::string response::load_template_file(request& req)
 	std::vector<char> buf;
 	std::string full_path;
 
-	if (!req.header().req_data.empty())
+	if (!req.header().req_data.empty() && req.header().method == "POST")
 	{
-		boost::thread post_req_thread(boost::bind(&response::handle_post_request, this, req));
-		return handle_arithmetic(req);
+		if (req.header().path == "/secret") {
+			//Arithmetic dedicated page
+			return handle_arithmetic(req);
+		}
+		else {
+			boost::thread post_req_thread(boost::bind(&response::handle_post_request, this, req));
+			return "<script>alert(\'Data is written to database\');</script>";
+		}
 	}
 	//construct a full path
 	if (path == "/")
@@ -97,48 +103,59 @@ std::string response::load_template_file(request& req)
 	}
 }
 
+std::string response::load_json_from_database()
+{
+	return "";
+}
 
 std::string response::handle_post_request(request& req)
 {
-	auto host = "127.0.0.1";
+	std::string host = "127.0.0.1";
 	auto port = 5600;
 	endp_obj db_endp(ADDR_FROM_STR(host), 5600);
 
 	//request_stream << json;
-
 	asio_ctx ctx;
-	sock_t sock_(ctx);
-	sock_.connect(db_endp);
+	sock_ptr_t sock_ = boost::make_shared<sock_t>(ctx);
+	sock_->connect(db_endp);
+	
 	auto hostname = "127.0.0.1";
 
 	std::string request_buffer;
 	std::ostringstream buf;
-
+	
 	ptree root;
+	
+	auto username = req.header().req_data.at(0).value;
+	auto first_name = req.header().req_data.at(1).value;
+	auto last_name  = req.header().req_data.at(2).value;
+	auto email = req.header().req_data.at(3).value;
+	auto password = req.header().req_data.at(4).value;
+	
+	
+	std::string url_encoded_data = "username=" + username + "&first_name=" + first_name +
+		"&last_name=" + last_name + "&email=" + email + "&password=" + password;
+	
 
-	write_json(buf, root, false);
-
-	std::string json = buf.str();
-
-	request_buffer += "GET / HTTP/1.1\r\n";
-	request_buffer += "Content-Type: text/plain; charset=utf-8 \r\n";
+	request_buffer += "POST /api/create_user HTTP/1.1\r\n";
+	request_buffer += "Content-Type: application/x-www-form-urlencoded\r\n";
+	request_buffer += "Host: " + host+ "\r\n";
 	request_buffer += "Accept: */*\r\n";
+	request_buffer += "Content-Length: " + std::to_string(url_encoded_data.length()) + "\r\n";
 	request_buffer += "Connection: close\r\n\r\n";
+	request_buffer += url_encoded_data;
 
 	err_code err;
-	sync_client{ sock_ptr_t(&sock_), request_buffer }(err);
+	sync_client{ sock_, request_buffer }(err);
 	if (err.cause != "") {
 		Logger::log(SEVERITY::ERR, err.cause);
 		return "";
 	}
 
-	//root.put("first_name", "Jerry");
-	//root.put("last_name", "Freed");
-	//root.put("email", "jerry.freed@gmail.com");
-	//root.put("password", "1234");
-	
 	return "Je'm balade sur l'avenue";
 }
+
+
 
 void response::connect_handler(const errc & err_conn)
 {
@@ -157,7 +174,6 @@ void response::write_handler(const errc & err, size_t bytes)
 		std::cerr << err.value();
 	}
 }
-
 	
 void response::read_handler(const errc & err, size_t bytes)
 {
