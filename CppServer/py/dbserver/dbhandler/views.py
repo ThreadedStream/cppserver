@@ -6,9 +6,7 @@ import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-
-
-
+from rest_framework import generics
 
 def home_page(request):
     now = datetime.datetime.now()
@@ -39,5 +37,10 @@ class RegisterUser(APIView):
             data['success'] = False
             data['result']  = False
             return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+
+class UserView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = (AllowAny, )
 
     
