@@ -38,6 +38,7 @@
     <ClInclude Include="core\non_constructible.h" />
     <ClInclude Include="core\non_copyable.hpp" />
     <ClInclude Include="core\typedefs.hpp" />
+    <ClInclude Include="core\utils.hpp" />
     <ClInclude Include="servers\chat_server\chat_server.hpp" />
     <ClInclude Include="servers\http_server\connection.hpp" />
     <ClInclude Include="servers\http_server\http_server.hpp" />
