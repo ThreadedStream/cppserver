@@ -1,13 +1,11 @@
 #pragma once
-#include "../../core/typedefs.hpp"
+#include "../../core/utils.hpp"
 #include "../../core/header.hpp"
 #include "request.hpp"
 #include "../../client/client.hpp"
 
 class response {
 public:
-	
-
 	
 	enum class status_code {
 		ok = 200,
@@ -40,7 +38,7 @@ public:
 	void connect_handler(const errc & err_conn);
 	void read_handler(const errc& err, size_t bytes);
 	void write_handler(const errc& err, size_t bytes);
-	std::string load_json_from_database();
+	std::string retrieve_user_data(request& req);
 	
 private:
 	std::string load_template_file(request& req);

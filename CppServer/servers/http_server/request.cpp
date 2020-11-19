@@ -7,10 +7,7 @@ namespace valid_data {
 		"GET", "POST", "PUT", "DELETE", "HEAD" 
 	};
 }
-
-
 /*
-	
 */
 void request::parseRequestData(const std::string& path)
 {
@@ -56,7 +53,6 @@ void request::parseRequestData(const std::string& path)
 		req_header_.req_data.emplace_back(field_val);
 	}
 }
-
 
 void request::parse()
 {

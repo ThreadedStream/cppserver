@@ -8,8 +8,6 @@ namespace code_templates {
 		"<h1 align=\"center\">Not Found<h1>";
 }
 
-
-
 namespace responses {
 	const char* code_to_html(response::status_code code)
 	{
@@ -71,13 +69,15 @@ std::string response::load_template_file(request& req)
 		}
 		else {
 			boost::thread post_req_thread(boost::bind(&response::handle_post_request, this, req));
-			return "<script>alert(\'Data is written to database\');</script>";
+			return "<script>alert('Data is written to database');</script>";
 		}
 	}
 	//construct a full path
-	if (path == "/")
-	{
+	if (path == "/"){
 		full_path = template_dir_ + "/" + "greet.html";
+	}
+	else if (path == "/users") {
+		return retrieve_user_data(req);
 	}
 	else {
 		if (path.substr(path.length() - 4, path.length()) != ".css")
@@ -103,9 +103,39 @@ std::string response::load_template_file(request& req)
 	}
 }
 
-std::string response::load_json_from_database()
+std::string response::retrieve_user_data(request& req)
 {
-	return "";
+	std::string host = "127.0.0.1";
+	auto port = 5600;
+	endp_obj db_endp(ADDR_FROM_STR(host), 5600);
+
+	//request_stream << json;
+	asio_ctx ctx;
+	sock_ptr_t sock_ = boost::make_shared<sock_t>(ctx);
+	sock_->connect(db_endp);
+
+	auto hostname = "127.0.0.1";
+
+	std::string request_buffer;
+	std::ostringstream buf;
+
+	request_buffer += "GET /api/users HTTP/1.1\r\n";
+	request_buffer += "Host: " + host + "\r\n";
+	request_buffer += "Accept: */*\r\n";
+	request_buffer += "Connection: close\r\n\r\n";
+
+	err_code err;
+	sync_client cl{ sock_, request_buffer };
+	cl(err);
+	auto hdpair = utils::split_response(cl.respstr);
+	auto pretty = utils::prettify_json(hdpair.second);
+	if (err.cause == "") {
+		return "<p>" + pretty + "</p>";
+	}
+	else {
+		Logger::log(SEVERITY::ERR, err.cause);
+		return "";
+	}
 }
 
 std::string response::handle_post_request(request& req)
@@ -132,10 +162,8 @@ std::string response::handle_post_request(request& req)
 	auto email = req.header().req_data.at(3).value;
 	auto password = req.header().req_data.at(4).value;
 	
-	
 	std::string url_encoded_data = "username=" + username + "&first_name=" + first_name +
 		"&last_name=" + last_name + "&email=" + email + "&password=" + password;
-	
 
 	request_buffer += "POST /api/create_user HTTP/1.1\r\n";
 	request_buffer += "Content-Type: application/x-www-form-urlencoded\r\n";
@@ -152,6 +180,7 @@ std::string response::handle_post_request(request& req)
 		return "";
 	}
 
+	sock_->close();
 	return "Je'm balade sur l'avenue";
 }
 
