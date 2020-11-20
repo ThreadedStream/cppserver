@@ -112,7 +112,13 @@ std::string response::retrieve_user_data(request& req)
 	//request_stream << json;
 	asio_ctx ctx;
 	sock_ptr_t sock_ = boost::make_shared<sock_t>(ctx);
-	sock_->connect(db_endp);
+	try {
+		sock_->connect(db_endp);
+	}
+	catch (boost::system::system_error er) {
+		Logger::log(SEVERITY::ERR, er.what());
+		return "<h1>Unable to connect to a database server</h1>";
+	}
 
 	auto hostname = "127.0.0.1";
 

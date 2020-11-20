@@ -19,28 +19,68 @@ struct utils {
 		return pair;
 	}
 
-
-	
 	static std::string prettify_json(std::string& json) {
 		std::string pretty;
 		
-		pretty = json;
+		json[0] = '\n';
+		json[json.length() - 1] = '\n';
 
-		replace_commas(pretty);
+		auto jsons = prettify(json);
+
+		for (const auto json : jsons) {
+			pretty += json;
+			pretty += "<br>";
+		}
 
 		return pretty;
 	}
 
 private:
-	static void replace_commas(std::string& str) {
+
+	/*
+		@The json response from the server is of the following form:
+		{"field1":"value1","field2":"value2", "field3":"value3"},{"field4":"value4","field5":"value5","field6":"value6"};
+		
+		My intention boils down to prettifying this response and transforming it into the following:
+		{
+			"field1" : "value1"
+			"field2" : "value2"
+			"field3" : "value3"
+		}
+		{
+			"field1" : "value1"
+			"field2" : "value2"
+			"field3" : "value3"
+		}
+
+	*/
+	static std::vector<std::string>
+	prettify(std::string& str) {
+		std::vector<std::string> out;
+		std::string s;
 		for (int i = 0; i < str.length(); ++i) {
-			if (str[i] == ',') {
-				insert_str_at_pos(i, str, "<br>");
+			if (str[i] == '{') {
+				s += str[i];
+				s += "<br>";
+				s += "<div style=\"margin-left:30px;\">";
+				++i;
+				while (str[i] != '}') {
+					if (str[i] == ',') {
+						s += "<br>";
+						++i;
+					}
+					s += str[i];
+					++i;
+				}
+				s += "</div><br>";
+				s += str[i];
+				s += "<br>";
+				out.emplace_back(s);
+				s.clear();
+				++i;
 			}
 		}
+		return out;
 	}
-
-	static void insert_str_at_pos(int pos, std::string& target, const std::string& in) {
-
-	}
+	
 };
