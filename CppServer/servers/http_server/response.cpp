@@ -80,9 +80,11 @@ std::string response::load_template_file(request& req)
 		return retrieve_user_data(req);
 	}
 	else {
-		if (path.substr(path.length() - 4, path.length()) != ".css")
+		if (path.substr(path.length() - 4, path.length()) != ".css" &&
+			path.substr(path.length() - 3, path.length()) != ".js") {
+			
 			full_path = template_dir_ + "/" + path + ".html";
-
+		}
 		else {
 			full_path = static_dir_ + '/' + path;
 		}

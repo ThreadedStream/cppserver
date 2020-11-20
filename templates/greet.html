@@ -3,13 +3,25 @@
         <link href="style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <h1 class="success">
-            It actually works!
-        </h1>
-        <canvas id="main" width="300px" height="300px"></canvas>
+        <!-- count particles -->
+        <div class="count-particles">
+            <span class="js-count-particles">--</span> particles
+        </div>
+        
+        <!-- particles.js container -->
+        <div id="particles-js"></div>
+  
+        <script src="particles.js"></script>
+        <script src="main.js" type="text/javascript"></script>
         <script>
-            fetch()
-        </script>
-
+            count_particles = document.querySelector('.js-count-particles');
+            update = function() {
+                if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+                    count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+                }
+                requestAnimationFrame(update);
+            };
+            requestAnimationFrame(update);
+        </script>    
     </body>
 </html>
