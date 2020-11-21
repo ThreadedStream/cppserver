@@ -13,3 +13,17 @@
 <p>To be honest, i have cheated a bit. For the sake of clarity, i want to point out that not all operations are directly executed by asio server.</p>
 <p>Instead, it serves as a kind of intermediate layer between a user and django server,which is runs in separate terminal.</p>
 <p>For example, consider a classical scenario of writing data to a database</p>
+<p>As was mentioned previously, asio server is nothing but an intermediate layer between django server and user. So it makes sense to run django server first
+   to request database reads and writes</p>
+
+<img src="assets/django.png" width=750px height=400px>
+
+<p>Note that you should run it on port 5600 to make it work</p>
+<p>Next, you should open up your browser and navigate to the following page</p>
+
+<img src="assets/signup.png" width=500px height=600px>
+<p>You may create your own user by filling out all fields</p>
+<p>To ensure that database operation was successfully completed, you may navigate to http://127.0.0.1/users</p>
+<p>Aforementioned page contains all of the json data retrieved from a django server</p>
+<img src="assets/json.png" width=300px height=300px>
+
