@@ -11,7 +11,7 @@
 
 <h1>How does it work?</h1>
 <p>To be honest, i have cheated a bit. For the sake of clarity, i want to point out that not all operations are directly executed by asio server.</p>
-<p>Instead, it serves as a kind of intermediate layer between a user and django server,which is runs in separate terminal.</p>
+<p>Instead, it serves as a kind of intermediate layer between a user and django server,which runs in separate terminal.</p>
 <p>For example, consider a classical scenario of writing data to a database</p>
 <p>As was mentioned previously, asio server is nothing but an intermediate layer between django server and user. So it makes sense to run django server first
    to request database reads and writes</p>
