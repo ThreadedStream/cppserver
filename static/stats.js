@@ -8,7 +8,6 @@ var Stats = function(){
     var ms = 0, msMin = Infinity, msMax = 0;
     var fps = 0, fpsMin = Infinity, fpsMax = 0;
 
-
     var container = document.createElement(' div ');
     container.id = "stats";
     container.addEventListener('mousedown', function(event) {
