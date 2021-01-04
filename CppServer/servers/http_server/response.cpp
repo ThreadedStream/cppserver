@@ -1,5 +1,6 @@
 #include "response.hpp"
 
+
 namespace code_templates {
 	std::string bad_req_template =
 		"<h1 align=\"center\">Bad Request</h1>";
@@ -25,19 +26,40 @@ namespace responses {
 	}
 }
 
-std::string response::handle_arithmetic(request& req)
+std::string response::handle_math(request& req)
 {
-	auto num1Str = req.header().req_data.at(0).value;
-	auto num2Str = req.header().req_data.at(1).value;
-
-	int num1 = atoi(num1Str.c_str());
-	int num2 = atoi(num2Str.c_str());
+	auto op = req.header().req_data.at(0).value;
 	
-	std::string buf;
+	if (op == "mult") {
+		auto num1Str = req.header().req_data.at(1).value;
+		auto num2Str = req.header().req_data.at(2).value;
+		int num1 = atoi(num1Str.c_str());
+		int num2 = atoi(num2Str.c_str());
 
-	buf = "The result is " + std::to_string(num1 * num2);
+		std::string buf;
 
-	return buf;
+		buf = "The result is " + std::to_string(num1 * num2);
+
+		return buf;
+	}
+	else if (op == "diff") {
+		float at;
+		auto func = req.header().req_data.at(1).value;
+		try {
+			at = atoi(req.header().req_data.at(2).value.c_str());
+		}
+		catch (const std::exception& ex) {
+			std::cerr << ex.what() << "\n";
+		}
+
+		auto tokens = math_unit::tokenize(func, "\t");
+		auto buf = math_unit::toks_to_str(tokens);
+		return buf;
+	}
+	else{
+		std::string buf = "Unknown operation" + op;
+		return buf;
+	}
 }
 
 std::string response::buildResponse(request& req)
@@ -65,7 +87,7 @@ std::string response::load_template_file(request& req)
 	{
 		if (req.header().path == "/secret") {
 			//Arithmetic dedicated page
-			return handle_arithmetic(req);
+			return handle_math(req);
 		}
 		else {
 			boost::thread post_req_thread(boost::bind(&response::handle_post_request, this, req));
@@ -97,7 +119,9 @@ std::string response::load_template_file(request& req)
 		in.seekg(0);
 		buf.resize(size);
 		in.read(buf.data(), size);
-		return buf.data();
+		std::string buffer = buf.data();
+		make_clean(buffer);
+		return buffer;
 	}
 	else {
 		std::string not_found_res = code_templates::not_found_template;
@@ -146,11 +170,17 @@ std::string response::retrieve_user_data(request& req)
 	}
 }
 
+void response::make_clean(std::string & text)
+{
+	auto last = text.find_last_of(">;");
+	text.erase(last + 1, text.length() - 1);
+}
+
 std::string response::handle_post_request(request& req)
 {
 	std::string host = "127.0.0.1";
 	auto port = 5600;
-	endp_obj db_endp(ADDR_FROM_STR(host), 5600);
+	endp_obj db_endp(ADDR_FROM_STR(host), port);
 
 	//request_stream << json;
 	asio_ctx ctx;

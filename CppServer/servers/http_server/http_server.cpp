@@ -6,8 +6,8 @@ http_server::http_server(ui32 backlog, ui32 thread_pool_size) :
 	endpoint_(ip::address::from_string(addr_), port_),
 	thread_pool_size_(thread_pool_size),
 	signals_(context_),
-	acc_(context_)
-{
+	acc_(context_){
+
 	process();
 }
 
@@ -15,16 +15,15 @@ http_server::http_server(ui32 backlog, ui32 thread_pool_size) :
 void http_server::run()
 {
 	std::vector<thread_ptr> threads;
-	for (size_t i = 0; i < thread_pool_size_; ++i)
-	{
+	for (size_t i = 0; i < thread_pool_size_; ++i){
+		
 		thread_ptr thread(new boost::thread(
 			boost::bind(&asio_ctx::run, &context_)));
 
 		threads.emplace_back(thread);
 	}
 
-	for (size_t i = 0; i < thread_pool_size_; ++i)
-	{
+	for (size_t i = 0; i < thread_pool_size_; ++i){
 		threads[i]->join();
 	}
 }

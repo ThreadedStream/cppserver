@@ -23,6 +23,7 @@
     <ClCompile Include="core\base_connection.hpp" />
     <ClCompile Include="core\dbconn.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math_unit.cpp" />
     <ClCompile Include="servers\chat_server\chat_server.cpp" />
     <ClCompile Include="servers\http_server\connection.cpp" />
     <ClCompile Include="servers\http_server\http_server.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="core\non_copyable.hpp" />
     <ClInclude Include="core\typedefs.hpp" />
     <ClInclude Include="core\utils.hpp" />
+    <ClInclude Include="math_unit.hpp" />
     <ClInclude Include="servers\chat_server\chat_server.hpp" />
     <ClInclude Include="servers\http_server\connection.hpp" />
     <ClInclude Include="servers\http_server\http_server.hpp" />

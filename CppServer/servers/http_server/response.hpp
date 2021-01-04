@@ -3,6 +3,7 @@
 #include "../../core/header.hpp"
 #include "request.hpp"
 #include "../../client/client.hpp"
+#include "../../math_unit.hpp"
 
 class response {
 public:
@@ -33,12 +34,13 @@ public:
 	//Note: Required for proper functioning
 	inline void set_static_dir(const std::string& static_dir) noexcept { static_dir_ = static_dir; }
 	inline void set_template_dir(const std::string& template_dir) noexcept { template_dir_ = template_dir; }
-	std::string handle_arithmetic(request& req);
+	std::string handle_math(request& req);
 	std::string handle_post_request(request& req);
 	void connect_handler(const errc & err_conn);
 	void read_handler(const errc& err, size_t bytes);
 	void write_handler(const errc& err, size_t bytes);
 	std::string retrieve_user_data(request& req);
+	void make_clean(std::string& text);
 	
 private:
 	std::string load_template_file(request& req);
