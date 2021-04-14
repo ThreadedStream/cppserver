@@ -1,5 +1,5 @@
 #include "connection.hpp"
-
+#include <sstream>
 
 
 connection::connection(asio_ctx& context) :
@@ -16,7 +16,7 @@ void connection::load_file(const std::string& filename)
 {
 	std::ifstream stream(filename, std::ios::in);
 	
-	if (boost::filesystem::exists(filename))
+	if (connection::file_exists(filename))
 	{
 		stream.seekg(0, std::ios::end);
 		size_t size = stream.tellg();
@@ -29,41 +29,18 @@ void connection::load_file(const std::string& filename)
 	}
 }
 
-void connection::request_db(const std::string& msg, err_code& err)
-{
-	if (dbwriter.is_open())
-	{
-		auto date = _now();
-		auto whole_message = msg + date;
-		dbwriter.write(whole_message.c_str(), msg.length());
-	}
-	else {
-		err.cause = "Failed to open db log file\n";
-		return;
-	}
-}
-
 /*
 	@Function for obtaining current time
 */
 std::string connection::_now()
 {
-	time_t raw_time;
-	struct tm * timeinfo = (struct tm*) malloc(sizeof(struct tm));
-	char buffer[80];
+	std::stringstream strstream;
 
-	time(&raw_time);
+	auto time = std::time(nullptr);
 
-	localtime_s(timeinfo, &raw_time);
+	strstream << std::put_time(std::gmtime(&time), "%F %T%z") << "\n";
 
-	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
-
-	delete timeinfo;
-
-	std::string output = "\n";
-	output += buffer;
-
-	return output;
+	return strstream.str();
 }
 
 //Main(so-called "driver") method
@@ -78,15 +55,6 @@ void connection::start_processing()
 		if (!err)
 		{
 			Logger::log(SEVERITY::DEBUG, "Message: " + std::string(buffer_.c_array()));
-			err_code err_c;
-			request_db(buffer_.data(), err_c);
-			if (err_c.cause != "")
-			{
-				Logger::log(SEVERITY::DEBUG, err_c.cause);
-			}
-			else {
-				Logger::log(SEVERITY::DEBUG, "Headers are written to a file\n");
-			}
 			request req(buffer_.c_array());
 			std::string str;
 			
@@ -106,10 +74,6 @@ void connection::start_processing()
 				}
 				else {
 					Logger::log(SEVERITY::DEBUG, "Number of bytes sent: " + length + std::string("\n"));
-					/*socket_.async_read_some(buffer(buffer_), boost::bind(&connection::read_completion_handler,
-						shared_from_this(),
-						placeholders::error,
-						placeholders::bytes_transferred));*/
 				}
 			});
 		}

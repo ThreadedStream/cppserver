@@ -6,7 +6,7 @@ class settings : public settings_base {
 
 public:
 	explicit settings() : settings_base() {}
-
+	
 	//getters' residency
 	inline std::string base_dir() const { return BASE_DIR_; }
 	inline std::string template_dir() const { return TEMPLATE_DIR_; }

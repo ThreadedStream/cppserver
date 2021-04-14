@@ -1,9 +1,10 @@
 #pragma once
 #include "../../core/logger.hpp"
 #include "../../core/non_copyable.hpp"
-#include "../../core/dbconn.hpp"
+#include "../../core/dpconn.hpp"
 #include "response.hpp"
 #include "settings.hpp"
+#include <sys/stat.h>
 
 //NOTE: Temporary declarations
 #define FILENAME_DEMO "F:/demo.cpp"
@@ -28,7 +29,6 @@ private:
 	void read_completion_handler(const	errc & err, size_t bytes_transferred);
 	void load_file(const std::string& filename);
 	//void write_headers_to_file(const std::string& str,err_code& err);
-	void request_db(const std::string& msg, err_code& er);
 	std::string _now();
 
 private:
@@ -41,4 +41,11 @@ private:
 	//boost::shared_ptr<dbconn> connInstance;
 	boost::array<char,8192> buffer_;
 	std::ofstream dbwriter;
+
+private:
+	//methods
+	inline bool file_exists(const std::string& filename){
+		  struct stat buffer;   
+		  return (stat (filename.c_str(), &buffer) == 0); 
+	}
 };

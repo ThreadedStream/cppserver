@@ -13,21 +13,14 @@ int main(int, const char*[])
 	std::cin >> chosenOption;
 	switch (chosenOption)
 	{
-	case '1':
-	{
+	case '1':{
 		std::cout << "Running...\n";
 		app.run_http_server();
 		break;
 	}
 
 	case '2':
-	{
 		std::cout << "Running...";
-		
+		break;
 	}
-		
-
-	}
-
-
 }

@@ -24,7 +24,6 @@ namespace tokens {
 }
 
 namespace funcs {
-	float 
 }
 
 
@@ -58,7 +57,7 @@ private:
 	
 	template<class R, class ... Args> 
 	float evaluate(const std::function<R(Args...)>& fn, Args ... args){
-		return fn(args);
+		return fn(args...);
 	}
 
 

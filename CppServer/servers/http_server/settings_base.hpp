@@ -1,14 +1,16 @@
 #pragma once
+#include <filesystem>
 #include "../../core/non_copyable.hpp"
 #include "../../core/typedefs.hpp"
+
+namespace fs = std::filesystem;
 
 //This is a base class for project settings
 class settings_base : private non_copyable{
 
 public:
 	settings_base() {
-		std::string path = _replace_all(__FILE__, "\\", "/");
-		BASE_DIR_ = _dirname(_dirname(_dirname(_dirname(path))));
+		BASE_DIR_ = fs::current_path();
 	}
 
 	virtual ~settings_base() {}
